@@ -25,7 +25,7 @@ struct Inclusion {
     char anotacion [20];
 };
 
-struct Exclusion {
+struct Extension {
     struct CasoDeUso casoDeUso;
     struct CasoDeUso casoDeUso2;
     char anotacion [20];
@@ -50,7 +50,7 @@ struct DiagramaCasosDeUso {
     int numeroAsociaciones;
     int numeroDependencias;
     int numeroInclusiones;
-    int numeroExclusiones;
+    int numeroExtensiones;
     int numeroGeneralizaciones;
 
     struct Autor autores [20];
@@ -60,6 +60,6 @@ struct DiagramaCasosDeUso {
     struct Asociacion asociaciones [20];
     struct Dependencia dependencias [20];
     struct Inclusion inclusiones [20];
-    struct Exclusion exclusiones [20];
+    struct Extension extensiones [20];
     struct Generalizacion generalizaciones [20];
 };
