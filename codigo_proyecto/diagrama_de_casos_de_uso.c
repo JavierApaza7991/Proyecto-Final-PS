@@ -1,16 +1,3 @@
-struct DiagramaCasosDeUso {
-    char nombre [20];
-    struct Autor *autores [20];
-    struct CasoDeUso *casosDeUso [20];
-
-    //relaciones
-    struct Asociacion *asociaciones [20];
-    struct Dependencia *dependencias [20];
-    struct Inclusion *inclusiones [20];
-    struct Exclusion *exclusiones [20];
-    struct Generalizacion *generalizaciones [20];
-};
-
 struct Autor {
     char nombre [20];
 };
@@ -53,4 +40,26 @@ struct Generalizacion {
     struct CasoDeUso casoDeUso;
     struct CasoDeUso casoDeUso2;
     char anotacion [20];
+};
+
+struct DiagramaCasosDeUso {
+    char nombre [20];
+
+    int numeroAutores;
+    int numeroCasosdeUso;
+    int numeroAsociaciones;
+    int numeroDependencias;
+    int numeroInclusiones;
+    int numeroExclusiones;
+    int numeroGeneralizaciones;
+
+    struct Autor autores [20];
+    struct CasoDeUso casosDeUso [20];
+
+    //relaciones
+    struct Asociacion asociaciones [20];
+    struct Dependencia dependencias [20];
+    struct Inclusion inclusiones [20];
+    struct Exclusion exclusiones [20];
+    struct Generalizacion generalizaciones [20];
 };

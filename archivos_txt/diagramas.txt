@@ -1,0 +1,40 @@
+{
+[Javier Apaza]
+[Alvaro,Hernando,]
+[]
+[]
+[]
+[]
+[]
+[]
+}
+{
+[Javier Apaza]
+[Alvaro,Hernando,Maria,]
+[]
+[]
+[]
+[]
+[]
+[]
+}
+{
+[Diagrama 3]
+[Alumno,Profesor,Administrativo,Padre,Conserje,]
+[]
+[]
+[]
+[]
+[]
+[]
+}
+{
+[Diagrama 4]
+[Autor 1,Autor 2,Autor 3,Autor 4,Autor 5,]
+[caso de uso 1,caso de uso 2,caso de uso 3,caso de uso 4,caso de uso 5,]
+[]
+[]
+[]
+[]
+[]
+}
