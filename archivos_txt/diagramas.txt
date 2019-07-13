@@ -18,3 +18,13 @@
 []
 []
 }
+{
+[]
+[Javier,Maria,]
+[Jugar Futbol,Programar,jugar dota,]
+[(Javier,jugar dota),(Maria,Programar),(Javier,Jugar Futbol),]
+[]
+[]
+[]
+[]
+}

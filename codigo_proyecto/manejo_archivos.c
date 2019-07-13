@@ -32,6 +32,12 @@ void escribir_diagrama_en_txt(struct DiagramaCasosDeUso *diagrama) {
 
     fprintf(f, "]\n[");
 
+    struct Asociacion *pAsociaciones = (*diagrama).asociaciones;
+    for (int i = 0; i < (*diagrama).numeroAsociaciones; i++) {
+        fprintf(f, "(%s,%s),", (*pAsociaciones).autor.nombre, (*pAsociaciones).casoDeUso.nombre);
+        *pAsociaciones++;
+    }
+
     fprintf(f, "]\n[");
 
     fprintf(f, "]\n[");
