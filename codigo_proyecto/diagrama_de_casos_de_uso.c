@@ -20,20 +20,20 @@ struct Asociacion {
 };
 
 struct Dependencia {
-    struct CasoDeUso casoDeUso;
-    struct CasoDeUso casoDeUso2;
+    struct CasoDeUso *casoDeUso;
+    struct CasoDeUso *casoDeUso2;
     char anotacion [20];
 };
 
 struct Inclusion {
-    struct CasoDeUso casoDeUso;
-    struct CasoDeUso casoDeUso2;
+    struct CasoDeUso *casoDeUso;
+    struct CasoDeUso *casoDeUso2;
     char anotacion [20];
 };
 
 struct Extension {
-    struct CasoDeUso casoDeUso;
-    struct CasoDeUso casoDeUso2;
+    struct CasoDeUso *casoDeUso;
+    struct CasoDeUso *casoDeUso2;
     char anotacion [20];
 };
 
@@ -41,10 +41,10 @@ struct Generalizacion {
     //Si hay herencia, tipo puede ser a:entre autores y c:entre casos de uso    
     char tipo;
     
-    struct Autor autor;
-    struct Autor autor2;
-    struct CasoDeUso casoDeUso;
-    struct CasoDeUso casoDeUso2;
+    struct Autor *autor;
+    struct Autor *autor2;
+    struct CasoDeUso *casoDeUso;
+    struct CasoDeUso *casoDeUso2;
     char anotacion  [20];
 };
 

@@ -18,3 +18,23 @@ Asociaciones: [(a,b),(a,c),(b,c),(b,b),(z,asd),]
 []
 []
 }
+{
+Nombre: [Diagrama 1]
+Autores: [Pedro,Alvaro,]
+Casos de Uso: [Matricularse,Jugar futbol,Ver netflix,]
+Asociaciones: [(Pedro,Ver netflix),(Alvaro,Matricularse),]
+[]
+[]
+[]
+[]
+}
+{
+Nombre: [Diagrama 2]
+Autores: [Alumno,Padre de Familia,Director,]
+Casos de Uso: [Llama la atencion,Juega futbol,Paga la pension,]
+Asociaciones: [(Alumno,Juega futbol),(Padre de Familia,Paga la pension),(Director,Llama la atencion),]
+[]
+[]
+[]
+[]
+}
