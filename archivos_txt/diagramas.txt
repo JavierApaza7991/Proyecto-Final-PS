@@ -38,3 +38,13 @@ Asociaciones: [(Alumno,Juega futbol),(Padre de Familia,Paga la pension),(Directo
 []
 []
 }
+{
+Nombre: [Miguel Grau M-8]
+Autores: []
+Casos de Uso: []
+Asociaciones: []
+[]
+[]
+[]
+[]
+}

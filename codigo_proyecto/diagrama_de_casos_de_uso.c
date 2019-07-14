@@ -1,5 +1,3 @@
-#include <stdbool.h>
-
 struct Autor {
     char nombre [20];
     int posicionX;
