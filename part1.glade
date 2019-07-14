@@ -3,8 +3,8 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="window">
-    <property name="width_request">480</property>
-    <property name="height_request">625</property>
+    <property name="width_request">590</property>
+    <property name="height_request">700</property>
     <property name="can_focus">False</property>
     <child type="titlebar">
       <placeholder/>
@@ -15,7 +15,7 @@
         <property name="can_focus">False</property>
         <child>
           <object class="GtkButton" id="botonguardar">
-            <property name="label" translatable="yes">Guardar</property>
+            <property name="label" translatable="yes">Guardar en .txt</property>
             <property name="width_request">114</property>
             <property name="height_request">42</property>
             <property name="visible">True</property>
@@ -25,8 +25,8 @@
             <signal name="clicked" handler="on_button1_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="x">350</property>
-            <property name="y">559</property>
+            <property name="x">455</property>
+            <property name="y">638</property>
           </packing>
         </child>
         <child>
@@ -45,7 +45,7 @@
             </attributes>
           </object>
           <packing>
-            <property name="x">5</property>
+            <property name="x">3</property>
             <property name="y">91</property>
           </packing>
         </child>
@@ -79,8 +79,8 @@
             <signal name="clicked" handler="on_botonautor_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="x">332</property>
-            <property name="y">90</property>
+            <property name="x">431</property>
+            <property name="y">89</property>
           </packing>
         </child>
         <child>
@@ -94,13 +94,13 @@
             <signal name="clicked" handler="on_botoncasos_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="x">331</property>
-            <property name="y">136</property>
+            <property name="x">431</property>
+            <property name="y">135</property>
           </packing>
         </child>
         <child>
           <object class="GtkEntry" id="autorcrear">
-            <property name="width_request">166</property>
+            <property name="width_request">260</property>
             <property name="height_request">34</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -112,7 +112,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="casocrear">
-            <property name="width_request">166</property>
+            <property name="width_request">260</property>
             <property name="height_request">34</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -157,7 +157,7 @@
           </object>
           <packing>
             <property name="x">25</property>
-            <property name="y">228</property>
+            <property name="y">208</property>
           </packing>
         </child>
         <child>
@@ -174,8 +174,8 @@
             </attributes>
           </object>
           <packing>
-            <property name="x">166</property>
-            <property name="y">225</property>
+            <property name="x">165</property>
+            <property name="y">206</property>
           </packing>
         </child>
         <child>
@@ -186,32 +186,20 @@
             <property name="can_focus">False</property>
           </object>
           <packing>
-            <property name="x">21</property>
-            <property name="y">260</property>
+            <property name="x">22</property>
+            <property name="y">238</property>
           </packing>
         </child>
         <child>
           <object class="GtkComboBoxText" id="combocaso">
-            <property name="width_request">148</property>
+            <property name="width_request">250</property>
             <property name="height_request">35</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
           <packing>
             <property name="x">165</property>
-            <property name="y">259</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkTextView" id="text">
-            <property name="width_request">445</property>
-            <property name="height_request">221</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-          </object>
-          <packing>
-            <property name="x">14</property>
-            <property name="y">329</property>
+            <property name="y">238</property>
           </packing>
         </child>
         <child>
@@ -225,8 +213,8 @@
             <property name="valign">start</property>
           </object>
           <packing>
-            <property name="x">328</property>
-            <property name="y">260</property>
+            <property name="x">430</property>
+            <property name="y">240</property>
           </packing>
         </child>
         <child>
@@ -248,13 +236,13 @@
         </child>
         <child>
           <object class="GtkEntry" id="nombrecrear">
-            <property name="width_request">300</property>
+            <property name="width_request">398</property>
             <property name="height_request">34</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
           </object>
           <packing>
-            <property name="x">18</property>
+            <property name="x">15</property>
             <property name="y">40</property>
           </packing>
         </child>
@@ -268,8 +256,34 @@
             <property name="receives_default">True</property>
           </object>
           <packing>
-            <property name="x">331</property>
+            <property name="x">431</property>
             <property name="y">43</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkDrawingArea" id="areaDiagrama">
+            <property name="width_request">550</property>
+            <property name="height_request">360</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="x">17</property>
+            <property name="y">281</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="cargarDiagrama">
+            <property name="label" translatable="yes">Cargar diagrama</property>
+            <property name="width_request">126</property>
+            <property name="height_request">42</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">314</property>
+            <property name="y">638</property>
           </packing>
         </child>
       </object>

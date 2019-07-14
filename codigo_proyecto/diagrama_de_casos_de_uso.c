@@ -1,15 +1,21 @@
+#include <stdbool.h>
+
 struct Autor {
     char nombre [20];
+    int posicionX;
+    int posicionY;
 };
 
 struct CasoDeUso {
     char nombre [20];
     char descripcion [50];
+    int posicionX;
+    int posicionY;
 };
 
 struct Asociacion {
-    struct Autor autor;
-    struct CasoDeUso casoDeUso;
+    struct Autor *autor;
+    struct CasoDeUso *casoDeUso;
     char anotacion [20];
 };
 
@@ -39,7 +45,7 @@ struct Generalizacion {
     struct Autor autor2;
     struct CasoDeUso casoDeUso;
     struct CasoDeUso casoDeUso2;
-    char anotacion [20];
+    char anotacion  [20];
 };
 
 struct DiagramaCasosDeUso {

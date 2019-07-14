@@ -14,7 +14,7 @@ void escribir_diagrama_en_txt(struct DiagramaCasosDeUso *diagrama) {
     FILE *f = NULL;
     f = fopen("archivos_txt/diagramas.txt", "a+");
 
-    fprintf(f, "{\n[%s]\n[", (*diagrama).nombre);
+    fprintf(f, "{\nNombre: [%s]\nAutores: [", (*diagrama).nombre);
 
     struct Autor *pAutores = (*diagrama).autores;
     for (int i = 0; i < (*diagrama).numeroAutores; i++) {
@@ -22,7 +22,7 @@ void escribir_diagrama_en_txt(struct DiagramaCasosDeUso *diagrama) {
         pAutores++;
     }
 
-    fprintf(f, "]\n[");
+    fprintf(f, "]\nCasos de Uso: [");
 
     struct CasoDeUso *pCasosDeUso = (*diagrama).casosDeUso;
     for (int i = 0; i < (*diagrama).numeroCasosdeUso; i++) {
@@ -30,12 +30,12 @@ void escribir_diagrama_en_txt(struct DiagramaCasosDeUso *diagrama) {
         pCasosDeUso++;
     }
 
-    fprintf(f, "]\n[");
+    fprintf(f, "]\nAsociaciones: [");
 
     struct Asociacion *pAsociaciones = (*diagrama).asociaciones;
     for (int i = 0; i < (*diagrama).numeroAsociaciones; i++) {
-        fprintf(f, "(%s,%s),", (*pAsociaciones).autor.nombre, (*pAsociaciones).casoDeUso.nombre);
-        *pAsociaciones++;
+        fprintf(f, "(%s,%s),", ((*pAsociaciones).autor)->nombre, ((*pAsociaciones).casoDeUso)->nombre);
+        pAsociaciones++;
     }
 
     fprintf(f, "]\n[");
