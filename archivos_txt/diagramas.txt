@@ -1,5 +1,5 @@
 {
-Nombre: [Diagrama 5]
+Nombre: [Diagrama 1]
 Autores: [Miguel Angel,Profesor,Administrativo,]
 Casos de Uso: [Juega dota,matricula,abre puertas,juega futbol,toma desayuno,]
 Asociaciones: [(Miguel Angel,Juega dota),(Profesor,matricula),(Administrativo,abre puertas),(Miguel Angel,juega futbol),(Profesor,toma desayuno),]
@@ -9,7 +9,7 @@ Asociaciones: [(Miguel Angel,Juega dota),(Profesor,matricula),(Administrativo,ab
 []
 }
 {
-Nombre: []
+Nombre: [Diagrama 2]
 Autores: [a,b,z,]
 Casos de Uso: [b,c,asd,]
 Asociaciones: [(a,b),(a,c),(b,c),(b,b),(z,asd),]
@@ -19,7 +19,7 @@ Asociaciones: [(a,b),(a,c),(b,c),(b,b),(z,asd),]
 []
 }
 {
-Nombre: [Diagrama 1]
+Nombre: [Diagrama 3]
 Autores: [Pedro,Alvaro,]
 Casos de Uso: [Matricularse,Jugar futbol,Ver netflix,]
 Asociaciones: [(Pedro,Ver netflix),(Alvaro,Matricularse),]
@@ -29,7 +29,7 @@ Asociaciones: [(Pedro,Ver netflix),(Alvaro,Matricularse),]
 []
 }
 {
-Nombre: [Diagrama 2]
+Nombre: [Diagrama 4]
 Autores: [Alumno,Padre de Familia,Director,]
 Casos de Uso: [Llama la atencion,Juega futbol,Paga la pension,]
 Asociaciones: [(Alumno,Juega futbol),(Padre de Familia,Paga la pension),(Director,Llama la atencion),]
@@ -39,10 +39,20 @@ Asociaciones: [(Alumno,Juega futbol),(Padre de Familia,Paga la pension),(Directo
 []
 }
 {
-Nombre: [Miguel Grau M-8]
-Autores: []
-Casos de Uso: []
-Asociaciones: []
+Nombre: [Diagrama NN]
+Autores: [l1,]
+Casos de Uso: [n2,]
+Asociaciones: [(l1,n2),]
+[]
+[]
+[]
+[]
+}
+{
+Nombre: [Diagrama 5]
+Autores: [Javier,]
+Casos de Uso: [Hacer PS,]
+Asociaciones: [(Javier,Hacer PS),]
 []
 []
 []

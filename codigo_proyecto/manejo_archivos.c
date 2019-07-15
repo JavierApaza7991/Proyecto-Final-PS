@@ -12,6 +12,18 @@ void crear_archivo_txt() {
     fclose(f);
 }
 
+void editar_diagramas_en_txt(struct DiagramaCasosDeUso *pDiagramas, int *pNumeroDiagramas) {
+    FILE *f = NULL;
+    f = fopen("archivos_txt/diagramas.txt", "w+");
+    fclose(f);
+
+    for (int i = 0; i < *pNumeroDiagramas; i++)
+    {
+        escribir_diagrama_en_txt(pDiagramas);
+        pDiagramas++;
+    }
+}
+
 void escribir_diagrama_en_txt(struct DiagramaCasosDeUso *diagrama) {
     FILE *f = NULL;
     f = fopen("archivos_txt/diagramas.txt", "a+");
@@ -52,7 +64,7 @@ void escribir_diagrama_en_txt(struct DiagramaCasosDeUso *diagrama) {
     fclose(f);
 }
 
-void obtener_diagramas (struct DiagramaCasosDeUso *pDiagramas, int numeroDiagramas) {
+void obtener_diagramas (struct DiagramaCasosDeUso *pDiagramas, int *pNumeroDiagramas) {
     FILE *f = NULL;
     f = fopen("archivos_txt/diagramas.txt", "r");
 
@@ -72,7 +84,7 @@ void obtener_diagramas (struct DiagramaCasosDeUso *pDiagramas, int numeroDiagram
             pNombre++;
             p++;
         }
-        printf("%s\n", (*pDiagramas).nombre);
+        //printf("%s\n", (*pDiagramas).nombre);
         
         //Obtener autores del diagrama
         fgets(linea, 300, f);
@@ -88,7 +100,7 @@ void obtener_diagramas (struct DiagramaCasosDeUso *pDiagramas, int numeroDiagram
                 nombreAutor++;
                 p++;
             }
-            printf("Autor: %s\n", (*autores).nombre);
+            //printf("Autor: %s\n", (*autores).nombre);
             autores++;
             (*pDiagramas).numeroAutores++;
             p++;
@@ -108,7 +120,7 @@ void obtener_diagramas (struct DiagramaCasosDeUso *pDiagramas, int numeroDiagram
                 nombreCaso++;
                 p++;
             }
-            printf("Casos: %s\n", (*casosDeUso).nombre);
+            //printf("Casos: %s\n", (*casosDeUso).nombre);
             casosDeUso++;
             (*pDiagramas).numeroCasosdeUso++;
             p++;
@@ -160,7 +172,7 @@ void obtener_diagramas (struct DiagramaCasosDeUso *pDiagramas, int numeroDiagram
             }
             (*asociaciones).casoDeUso = pCasos;
 
-            printf("Asociacion: %s - %s\n", ((*asociaciones).autor)->nombre, ((*asociaciones).casoDeUso)->nombre);
+            //printf("Asociacion: %s - %s\n", ((*asociaciones).autor)->nombre, ((*asociaciones).casoDeUso)->nombre);
             asociaciones++;
             (*pDiagramas).numeroAsociaciones++;
         }
@@ -172,7 +184,7 @@ void obtener_diagramas (struct DiagramaCasosDeUso *pDiagramas, int numeroDiagram
         fgets(linea, 300, f);
 
         pDiagramas++;
-        numeroDiagramas++;
+        (*pNumeroDiagramas)++;
 
         //Sirve para identificar que hay almenos un diagrama mas
         fgets(linea, 300, f);

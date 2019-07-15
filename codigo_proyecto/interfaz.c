@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <gtk/gtk.h>
 
 #include "diagrama_de_casos_de_uso.c"
@@ -5,7 +6,10 @@
 #define FONT "Sans Bold 8"
 
 GtkBuilder *gladear;
+GtkBuilder *VentanaNueva;
+
 GtkWidget *FrmPrincipal;
+GtkWidget *FrmSecundario;
 GtkWidget *nombrecrear;
 GtkWidget *BtnNombre;
 GtkWidget *autorcrear;
@@ -18,8 +22,12 @@ GtkWidget *BtnAsociacion;
 GtkWidget *AreaDiagrama;
 GtkWidget *BtnCargar;
 GtkWidget *BtnGuardar;
+GtkWidget *AceptarDiagrama;
+GtkWidget *ComboDiagrama;
 
 float M_PI = 3.1416;
+
+bool modo_editabe = false;
 
 struct DiagramaCasosDeUso d;
 struct DiagramaCasosDeUso *diagrama = &d;
@@ -261,25 +269,111 @@ void agregar_asociacion (GtkButton* button, gpointer user_data)
     (*diagrama).numeroAsociaciones++;
 }
 
+int numeroDiagramas = 0;
+int *pNumeroDiagramas = &numeroDiagramas;
+struct DiagramaCasosDeUso arregloDiagramas [20];
+struct DiagramaCasosDeUso *pDiagramas = arregloDiagramas;
+
 void guardar_diagrama (GtkButton* button, gpointer user_data) 
 {
-    //Este método pertenece a manejo_archivos.c
-    escribir_diagrama_en_txt(diagrama);
+    pNumeroDiagramas = &numeroDiagramas;
+    pDiagramas = arregloDiagramas;
+
+    //Estos métodos pertenecen a manejo_archivos.c
+    if (modo_editabe)
+        editar_diagramas_en_txt(pDiagramas, pNumeroDiagramas);
+    else
+        escribir_diagrama_en_txt(diagrama);
 }
 
-void cargar_diagramas (GtkButton* button, gpointer user_data) 
-{
-    int numeroDiagramas = 0;
-    struct DiagramaCasosDeUso diagramas [20];
-    struct DiagramaCasosDeUso *pDiagramas = diagramas;
-
-    //Este método pertenece a manejo_archivos.c
-    obtener_diagramas(pDiagramas, numeroDiagramas);
+void seleccionar_diagrama (GtkButton* button, gpointer user_data)
+{   
+    modo_editabe = true;
     
-    diagrama = &diagramas[0];
+    //g_signal_connect(BtnCargar, "clicked", G_CALLBACK(cargar_diagramas), AreaDiagrama);
+    gchar *pTexto = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(ComboDiagrama));
+    char *pNombreDiagrama;
 
+    printf("Número de diagramas: %d\n", numeroDiagramas);
+
+    pDiagramas = arregloDiagramas;
+    for (int i = 0; i < numeroDiagramas; i++)
+    {   
+        pNombreDiagrama = (*pDiagramas).nombre;
+        if (comparar_palabras(pTexto, pNombreDiagrama))
+            break;
+        pDiagramas++;
+    }
+
+    diagrama = pDiagramas;
+
+    //Colocar el nombre del diagrama q se va a editar
+    gtk_entry_set_text(GTK_ENTRY(nombrecrear), (*diagrama).nombre);
+
+    //Eliminar todos los elementos del combobox de autores
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(ComboAutor));
+    //Colocar los autores en el combobox del diagrama q se va a editar
+    struct Autor *pAutores = (*diagrama).autores;
+    for (int i = 0; i < (*diagrama).numeroAutores; i++) {
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ComboAutor), (*pAutores).nombre);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(ComboAutor), 0);
+        pAutores++;
+    }
+
+    //Eliminar todos los elementos del combobox de casos de uso
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(ComboCasoUso));
+    //Colocar los casos de uso en el combobox del diagrama q se va a editar
+    struct CasoDeUso *pCasosDeUso = (*diagrama).casosDeUso;
+    for (int i = 0; i < (*diagrama).numeroCasosdeUso; i++) {
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ComboCasoUso), (*pCasosDeUso).nombre);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(ComboCasoUso), 0);
+        pCasosDeUso++;
+    }
+
+    //Con esto se grafica automáticamente el diagrama guardado en el .txt
     gtk_widget_queue_draw((GtkWidget *) user_data);
-    printf("Cargo todos los diagramas.\n");
+
+    gtk_widget_destroy(FrmSecundario);
+}
+
+void on_open_ventana (GtkButton* button, gpointer user_data)
+{   
+    /*GtkWidget *VentanaNueva;
+    GtkWidget *ComboDiagrama;
+
+    VentanaNueva = gtk_window_new(GTK_WINDOW_TOPLEVEL);  
+    gtk_window_set_position(GTK_WINDOW(VentanaNueva), GTK_WIN_POS_CENTER);
+    gtk_window_set_default_size(GTK_WINDOW(VentanaNueva), 600, 300); 
+    gtk_window_set_title(GTK_WINDOW(VentanaNueva), "Diagramas");
+
+    gtk_widget_show_all(VentanaNueva);*/
+    VentanaNueva = gtk_builder_new();
+    gtk_builder_add_from_file(VentanaNueva, "part2.glade", NULL);
+
+    FrmSecundario = GTK_WIDGET(gtk_builder_get_object(VentanaNueva, "ventana2"));
+
+    ComboDiagrama = GTK_WIDGET(gtk_builder_get_object(VentanaNueva, "comboDiagrama"));
+    AceptarDiagrama = GTK_WIDGET(gtk_builder_get_object(VentanaNueva, "aceptarDiagrama"));
+
+    numeroDiagramas = 0;
+    pNumeroDiagramas = &numeroDiagramas;
+    pDiagramas = arregloDiagramas;
+    //Este método pertenece a manejo_archivos.c
+    obtener_diagramas(pDiagramas, pNumeroDiagramas);
+
+    //Cargando al combobox todos los nombres de los diagramas del .txt
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(ComboDiagrama));
+    pDiagramas = arregloDiagramas;
+    for (int i = 0; i < *pNumeroDiagramas; i++)
+    {
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ComboDiagrama), (*pDiagramas).nombre);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(ComboDiagrama), 0);
+        pDiagramas++;
+    }
+    
+    g_signal_connect(AceptarDiagrama, "clicked", G_CALLBACK(seleccionar_diagrama), AreaDiagrama); 
+    g_object_unref(G_OBJECT (VentanaNueva));
+    gtk_widget_show_all(FrmSecundario);  
 }
 
 void correr_interfaz (int argc, char *argv[])
@@ -312,7 +406,8 @@ void correr_interfaz (int argc, char *argv[])
     g_signal_connect(BtnCasoUso, "clicked", G_CALLBACK(agregar_caso_uso), AreaDiagrama);
     g_signal_connect(BtnAsociacion, "clicked", G_CALLBACK(agregar_asociacion), AreaDiagrama);
     g_signal_connect(G_OBJECT(AreaDiagrama), "draw", G_CALLBACK(on_draw_event), NULL);
-    g_signal_connect(BtnCargar, "clicked", G_CALLBACK(cargar_diagramas), AreaDiagrama);
+    g_signal_connect(BtnCargar, "clicked", G_CALLBACK(on_open_ventana), VentanaNueva);
+    //g_signal_connect(BtnCargar, "clicked", G_CALLBACK(cargar_diagramas), AreaDiagrama);
     g_signal_connect(BtnGuardar, "clicked", G_CALLBACK(guardar_diagrama), NULL);
     g_signal_connect(BtnGuardar, "clicked", G_CALLBACK(gtk_main_quit), NULL);
 
