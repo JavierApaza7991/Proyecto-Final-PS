@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 struct Autor {
     char nombre [20];
     int posicionX;
@@ -15,6 +17,7 @@ struct Asociacion {
     struct Autor *autor;
     struct CasoDeUso *casoDeUso;
     char anotacion [20];
+    bool activo;
 };
 
 struct Dependencia {
@@ -66,4 +69,5 @@ struct DiagramaCasosDeUso {
     struct Inclusion inclusiones [20];
     struct Extension extensiones [20];
     struct Generalizacion generalizaciones [20];
+    bool activo;
 };

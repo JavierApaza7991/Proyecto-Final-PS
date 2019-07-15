@@ -19,7 +19,8 @@ void editar_diagramas_en_txt(struct DiagramaCasosDeUso *pDiagramas, int *pNumero
 
     for (int i = 0; i < *pNumeroDiagramas; i++)
     {
-        escribir_diagrama_en_txt(pDiagramas);
+        if ((*pDiagramas).activo)
+            escribir_diagrama_en_txt(pDiagramas);
         pDiagramas++;
     }
 }
@@ -48,7 +49,8 @@ void escribir_diagrama_en_txt(struct DiagramaCasosDeUso *diagrama) {
 
     struct Asociacion *pAsociaciones = (*diagrama).asociaciones;
     for (int i = 0; i < (*diagrama).numeroAsociaciones; i++) {
-        fprintf(f, "(%s,%s),", ((*pAsociaciones).autor)->nombre, ((*pAsociaciones).casoDeUso)->nombre);
+        if ((*pAsociaciones).activo)
+            fprintf(f, "(%s,%s),", ((*pAsociaciones).autor)->nombre, ((*pAsociaciones).casoDeUso)->nombre);
         pAsociaciones++;
     }
 
@@ -171,6 +173,7 @@ void obtener_diagramas (struct DiagramaCasosDeUso *pDiagramas, int *pNumeroDiagr
                 pCasos++;
             }
             (*asociaciones).casoDeUso = pCasos;
+            (*asociaciones).activo = true;
 
             //printf("Asociacion: %s - %s\n", ((*asociaciones).autor)->nombre, ((*asociaciones).casoDeUso)->nombre);
             asociaciones++;
@@ -183,6 +186,7 @@ void obtener_diagramas (struct DiagramaCasosDeUso *pDiagramas, int *pNumeroDiagr
         fgets(linea, 300, f);
         fgets(linea, 300, f);
 
+        (*pDiagramas).activo = true;
         pDiagramas++;
         (*pNumeroDiagramas)++;
 

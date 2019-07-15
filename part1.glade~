@@ -14,6 +14,21 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
+          <object class="GtkButton" id="cargarDiagrama">
+            <property name="label" translatable="yes">Cargar diagrama</property>
+            <property name="width_request">126</property>
+            <property name="height_request">42</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="on_cargarDiagrama_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="x">314</property>
+            <property name="y">638</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkButton" id="botonguardar">
             <property name="label" translatable="yes">Guardar en .txt</property>
             <property name="width_request">115</property>
@@ -204,7 +219,7 @@
         </child>
         <child>
           <object class="GtkButton" id="botonasociacion">
-            <property name="label" translatable="yes">Agregar</property>
+            <property name="label" translatable="yes">Agregar relación</property>
             <property name="width_request">137</property>
             <property name="height_request">31</property>
             <property name="visible">True</property>
@@ -214,7 +229,21 @@
           </object>
           <packing>
             <property name="x">430</property>
-            <property name="y">240</property>
+            <property name="y">209</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="botoneliminarasociacion">
+            <property name="label" translatable="yes">Eliminar relación</property>
+            <property name="width_request">137</property>
+            <property name="height_request">31</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">430</property>
+            <property name="y">244</property>
           </packing>
         </child>
         <child>
@@ -273,17 +302,16 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="cargarDiagrama">
-            <property name="label" translatable="yes">Cargar diagrama</property>
+          <object class="GtkButton" id="botonnuevodiagrama">
+            <property name="label" translatable="yes">Nuevo diagrama</property>
             <property name="width_request">126</property>
             <property name="height_request">42</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <signal name="clicked" handler="on_cargarDiagrama_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="x">314</property>
+            <property name="x">174</property>
             <property name="y">638</property>
           </packing>
         </child>

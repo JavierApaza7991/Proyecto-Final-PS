@@ -2,7 +2,7 @@
 Nombre: [Diagrama 1]
 Autores: [Miguel Angel,Profesor,Administrativo,]
 Casos de Uso: [Juega dota,matricula,abre puertas,juega futbol,toma desayuno,]
-Asociaciones: [(Miguel Angel,Juega dota),(Profesor,matricula),(Administrativo,abre puertas),(Miguel Angel,juega futbol),(Profesor,toma desayuno),]
+Asociaciones: [(Miguel Angel,Juega dota),(Profesor,matricula),(Administrativo,abre puertas),(Miguel Angel,juega futbol),]
 []
 []
 []
@@ -50,7 +50,7 @@ Asociaciones: [(l1,n2),]
 }
 {
 Nombre: [Diagrama 5]
-Autores: [Javier,]
+Autores: [Javier,Maria,]
 Casos de Uso: [Hacer PS,]
 Asociaciones: [(Javier,Hacer PS),]
 []

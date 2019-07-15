@@ -15,7 +15,7 @@
         <property name="can_focus">False</property>
         <child>
           <object class="GtkButton" id="aceptarDiagrama">
-            <property name="label" translatable="yes">Seleccionar</property>
+            <property name="label" translatable="yes">Editar diagrama</property>
             <property name="width_request">126</property>
             <property name="height_request">42</property>
             <property name="visible">True</property>
@@ -50,6 +50,20 @@
           <packing>
             <property name="x">43</property>
             <property name="y">78</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="eliminardiagrama">
+            <property name="label" translatable="yes">Eliminar diagrama</property>
+            <property name="width_request">136</property>
+            <property name="height_request">42</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">101</property>
+            <property name="y">158</property>
           </packing>
         </child>
       </object>

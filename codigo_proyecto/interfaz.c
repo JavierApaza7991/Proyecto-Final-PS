@@ -19,9 +19,12 @@ GtkWidget *BtnCasoUso;
 GtkWidget *ComboAutor;
 GtkWidget *ComboCasoUso;
 GtkWidget *BtnAsociacion;
+GtkWidget *BtnEliminarAsociacion;
 GtkWidget *AreaDiagrama;
+GtkWidget *BtnNuevo;
 GtkWidget *BtnCargar;
 GtkWidget *BtnGuardar;
+GtkWidget *EliminarDiagrama;
 GtkWidget *AceptarDiagrama;
 GtkWidget *ComboDiagrama;
 
@@ -181,7 +184,8 @@ static void do_drawing (cairo_t *cr)
     struct Asociacion *pAsociaciones = (*diagrama).asociaciones;
     //Dibujando las relaciones de asociación
     for (int i = 0; i < (*diagrama).numeroAsociaciones; i++) {
-        do_drawing_asociacion(cr, (*pAsociaciones).autor, (*pAsociaciones).casoDeUso);
+        if ((*pAsociaciones).activo)
+            do_drawing_asociacion(cr, (*pAsociaciones).autor, (*pAsociaciones).casoDeUso);
 
         pAsociaciones++;
     }
@@ -190,7 +194,7 @@ static void do_drawing (cairo_t *cr)
 static gboolean on_draw_event (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
     do_drawing(cr);
-
+    
     return FALSE;
 }
 
@@ -263,16 +267,66 @@ void agregar_asociacion (GtkButton* button, gpointer user_data)
 
     (*pAsociaciones).autor = pAutores;
     (*pAsociaciones).casoDeUso = pCasosDeUso;
+    (*pAsociaciones).activo = true;
 
     gtk_widget_queue_draw((GtkWidget *) user_data);
 
     (*diagrama).numeroAsociaciones++;
 }
 
+void eliminar_asociacion (GtkButton* button, gpointer user_data) 
+{
+    bool encontrado = false;
+    
+    gchar *autor = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(ComboAutor));
+    gchar *casoDeUso = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(ComboCasoUso));
+
+    char *autorAsociacion;
+    char *casoAsociacion;
+    struct Asociacion *pAsociaciones = (*diagrama).asociaciones;
+    for (int i = 0; i < (*diagrama).numeroAsociaciones; i++) {
+        autorAsociacion = ((*pAsociaciones).autor)->nombre;
+        casoAsociacion = ((*pAsociaciones).casoDeUso)->nombre;
+        if (comparar_palabras(autor, autorAsociacion) && comparar_palabras(casoDeUso, casoAsociacion) && (*pAsociaciones).activo) 
+        {
+            (*pAsociaciones).activo = false;
+            encontrado = true;
+            break;
+        }
+        pAsociaciones++;
+    }
+    if (!encontrado) 
+    {
+        printf("La relación de Asociación no se encontró.\n");
+    }
+
+    gtk_widget_queue_draw((GtkWidget *) user_data);
+}
+
 int numeroDiagramas = 0;
 int *pNumeroDiagramas = &numeroDiagramas;
 struct DiagramaCasosDeUso arregloDiagramas [20];
 struct DiagramaCasosDeUso *pDiagramas = arregloDiagramas;
+
+void nuevo_diagrama (GtkButton* button, gpointer user_data) 
+{
+    modo_editabe = false;
+
+    gtk_entry_set_text(GTK_ENTRY(nombrecrear), "");
+    gtk_entry_set_text(GTK_ENTRY(autorcrear), "");
+    gtk_entry_set_text(GTK_ENTRY(casousocrear), "");
+
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(ComboAutor));
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(ComboCasoUso));
+
+    struct DiagramaCasosDeUso *nuevoDiagrama = malloc (sizeof (struct DiagramaCasosDeUso));
+    strcpy((*nuevoDiagrama).nombre, "");
+    
+    diagrama = nuevoDiagrama;
+    inicializar_numeros_diagrama ();
+
+    gtk_widget_queue_draw ((GtkWidget *) user_data);
+}
 
 void guardar_diagrama (GtkButton* button, gpointer user_data) 
 {
@@ -284,6 +338,8 @@ void guardar_diagrama (GtkButton* button, gpointer user_data)
         editar_diagramas_en_txt(pDiagramas, pNumeroDiagramas);
     else
         escribir_diagrama_en_txt(diagrama);
+
+    printf("Se ha guardado exitosamente.\n");
 }
 
 void seleccionar_diagrama (GtkButton* button, gpointer user_data)
@@ -336,6 +392,39 @@ void seleccionar_diagrama (GtkButton* button, gpointer user_data)
     gtk_widget_destroy(FrmSecundario);
 }
 
+void eliminar_diagrama (GtkButton* button, gpointer user_data)
+{
+    gchar *pTexto = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(ComboDiagrama));
+    char *pNombreDiagrama;
+
+    pDiagramas = arregloDiagramas;
+    for (int i = 0; i < numeroDiagramas; i++)
+    {   
+        pNombreDiagrama = (*pDiagramas).nombre;
+        if (comparar_palabras(pTexto, pNombreDiagrama)) {
+            (*pDiagramas).activo = false;
+            break;
+        }
+        pDiagramas++;
+    }
+
+    pDiagramas = arregloDiagramas;
+    pNumeroDiagramas = &numeroDiagramas;
+    editar_diagramas_en_txt(pDiagramas, pNumeroDiagramas);
+
+    //Cargando al combobox todos los nombres de los diagramas del .txt
+    gtk_combo_box_text_remove_all(GTK_COMBO_BOX_TEXT(ComboDiagrama));
+    pDiagramas = arregloDiagramas;
+    for (int i = 0; i < *pNumeroDiagramas; i++)
+    {
+        if ((*pDiagramas).activo) {
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ComboDiagrama), (*pDiagramas).nombre);
+            gtk_combo_box_set_active(GTK_COMBO_BOX(ComboDiagrama), 0);
+        }
+        pDiagramas++;
+    }
+}
+
 void on_open_ventana (GtkButton* button, gpointer user_data)
 {   
     /*GtkWidget *VentanaNueva;
@@ -353,6 +442,7 @@ void on_open_ventana (GtkButton* button, gpointer user_data)
     FrmSecundario = GTK_WIDGET(gtk_builder_get_object(VentanaNueva, "ventana2"));
 
     ComboDiagrama = GTK_WIDGET(gtk_builder_get_object(VentanaNueva, "comboDiagrama"));
+    EliminarDiagrama = GTK_WIDGET(gtk_builder_get_object(VentanaNueva, "eliminardiagrama"));
     AceptarDiagrama = GTK_WIDGET(gtk_builder_get_object(VentanaNueva, "aceptarDiagrama"));
 
     numeroDiagramas = 0;
@@ -371,6 +461,7 @@ void on_open_ventana (GtkButton* button, gpointer user_data)
         pDiagramas++;
     }
     
+    g_signal_connect(EliminarDiagrama, "clicked", G_CALLBACK(eliminar_diagrama), NULL);
     g_signal_connect(AceptarDiagrama, "clicked", G_CALLBACK(seleccionar_diagrama), AreaDiagrama); 
     g_object_unref(G_OBJECT (VentanaNueva));
     gtk_widget_show_all(FrmSecundario);  
@@ -393,7 +484,9 @@ void correr_interfaz (int argc, char *argv[])
     ComboAutor = GTK_WIDGET(gtk_builder_get_object(gladear, "comboautor"));
     ComboCasoUso = GTK_WIDGET(gtk_builder_get_object(gladear, "combocaso"));
     BtnAsociacion = GTK_WIDGET(gtk_builder_get_object(gladear, "botonasociacion"));
-    AreaDiagrama = GTK_WIDGET(gtk_builder_get_object(gladear, "areaDiagrama")); 
+    BtnEliminarAsociacion = GTK_WIDGET(gtk_builder_get_object(gladear, "botoneliminarasociacion"));
+    AreaDiagrama = GTK_WIDGET(gtk_builder_get_object(gladear, "areaDiagrama"));
+    BtnNuevo = GTK_WIDGET(gtk_builder_get_object(gladear, "botonnuevodiagrama"));
     BtnCargar = GTK_WIDGET(gtk_builder_get_object(gladear, "cargarDiagrama"));
     BtnGuardar = GTK_WIDGET(gtk_builder_get_object(gladear, "botonguardar"));
 
@@ -405,11 +498,13 @@ void correr_interfaz (int argc, char *argv[])
     g_signal_connect(BtnAutor, "clicked", G_CALLBACK(agregar_autor), AreaDiagrama);
     g_signal_connect(BtnCasoUso, "clicked", G_CALLBACK(agregar_caso_uso), AreaDiagrama);
     g_signal_connect(BtnAsociacion, "clicked", G_CALLBACK(agregar_asociacion), AreaDiagrama);
+    g_signal_connect(BtnEliminarAsociacion, "clicked", G_CALLBACK(eliminar_asociacion), AreaDiagrama);
     g_signal_connect(G_OBJECT(AreaDiagrama), "draw", G_CALLBACK(on_draw_event), NULL);
+    g_signal_connect(BtnNuevo, "clicked", G_CALLBACK(nuevo_diagrama), AreaDiagrama);
     g_signal_connect(BtnCargar, "clicked", G_CALLBACK(on_open_ventana), VentanaNueva);
     //g_signal_connect(BtnCargar, "clicked", G_CALLBACK(cargar_diagramas), AreaDiagrama);
     g_signal_connect(BtnGuardar, "clicked", G_CALLBACK(guardar_diagrama), NULL);
-    g_signal_connect(BtnGuardar, "clicked", G_CALLBACK(gtk_main_quit), NULL);
+    //g_signal_connect(BtnGuardar, "clicked", G_CALLBACK(gtk_main_quit), NULL);
 
     g_object_unref(G_OBJECT (gladear));
     gtk_widget_show_all(FrmPrincipal);                
