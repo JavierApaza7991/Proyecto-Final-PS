@@ -2,7 +2,7 @@
 Nombre: [Diagrama 1]
 Autores: [Miguel Angel,Profesor,Administrativo,]
 Casos de Uso: [Juega dota,matricula,abre puertas,juega futbol,toma desayuno,]
-Asociaciones: [(Miguel Angel,Juega dota),(Profesor,matricula),(Administrativo,abre puertas),(Miguel Angel,juega futbol),]
+Asociaciones: [(Miguel Angel,Juega dota),(Profesor,matricula),(Administrativo,abre puertas),(Miguel Angel,juega futbol),(Profesor,toma desayuno),]
 []
 []
 []
@@ -10,9 +10,9 @@ Asociaciones: [(Miguel Angel,Juega dota),(Profesor,matricula),(Administrativo,ab
 }
 {
 Nombre: [Diagrama 2]
-Autores: [a,b,z,]
+Autores: [a,b,z,q,]
 Casos de Uso: [b,c,asd,]
-Asociaciones: [(a,b),(a,c),(b,c),(b,b),(z,asd),]
+Asociaciones: [(a,b),(b,c),(b,b),(z,asd),(b,asd),]
 []
 []
 []

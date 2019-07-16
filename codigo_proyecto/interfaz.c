@@ -30,10 +30,40 @@ GtkWidget *ComboDiagrama;
 
 float M_PI = 3.1416;
 
-bool modo_editabe = false;
+int numeroDiagramas = 0;
+int *pNumeroDiagramas = &numeroDiagramas;
+struct DiagramaCasosDeUso arregloDiagramas [20];
+struct DiagramaCasosDeUso *pDiagramas = arregloDiagramas;
 
 struct DiagramaCasosDeUso d;
 struct DiagramaCasosDeUso *diagrama = &d;
+
+void inicializar_numeros_diagrama ();
+bool comparar_palabras(char *palabra1, char *palabra2);
+int verficar_espacio (char *nombre);
+void draw_text_autor (cairo_t *cr, int x, int y, struct Autor *autor);
+void draw_text_caso (cairo_t *cr,int x, int y, char *caso);
+void do_drawing_autor (cairo_t *cr, int x, int y, struct Autor *autor);
+void do_drawing_caso (cairo_t *cr, int x, int y, char *caso);
+void do_drawing_asociacion (cairo_t *cr, struct Autor *autor, struct CasoDeUso *caso);
+static void do_drawing (cairo_t *cr);
+static gboolean on_draw_event (GtkWidget *widget, cairo_t *cr, gpointer user_data);
+void agregar_nombre (GtkButton* button, gpointer user_data);
+void agregar_autor (GtkButton* button, gpointer user_data);
+void agregar_caso_uso (GtkButton* button, gpointer user_data);
+void agregar_asociacion (GtkButton* button, gpointer user_data);
+void mensaje_error ();
+void eliminar_asociacion (GtkButton* button, gpointer user_data);
+void nuevo_diagrama (GtkButton* button, gpointer user_data);
+void guardar_diagrama (GtkButton* button, gpointer user_data);
+void seleccionar_diagrama (GtkButton* button, gpointer user_data);
+void eliminar_diagrama (GtkButton* button, gpointer user_data);
+void on_open_ventana (GtkButton* button, gpointer user_data);
+void correr_interfaz (int argc, char *argv[]);
+
+bool modo_editabe = false;
+
+char *mensaje;
 
 void inicializar_numeros_diagrama () {
     (*diagrama).numeroAutores = 0;
@@ -200,78 +230,173 @@ static gboolean on_draw_event (GtkWidget *widget, cairo_t *cr, gpointer user_dat
 
 void agregar_nombre (GtkButton* button, gpointer user_data) 
 {
+    bool diagrama_existe = false;
     const gchar *nombre = gtk_entry_get_text(GTK_ENTRY(nombrecrear));
+    char *p = (char *) nombre;
 
-    strcpy((*diagrama).nombre, nombre);
+    numeroDiagramas = 0;
+    pNumeroDiagramas = &numeroDiagramas;
+    pDiagramas = arregloDiagramas;
+    //Este método pertenece a manejo_archivos.c
+    obtener_diagramas(pDiagramas, pNumeroDiagramas);
+
+    pDiagramas = arregloDiagramas;
+    char *pNombreDiagrama;
+    for (int i = 0; i < *pNumeroDiagramas; i++)
+    {
+        pNombreDiagrama = (*pDiagramas).nombre;
+        if (comparar_palabras(p, pNombreDiagrama))
+        {
+            diagrama_existe = true;
+            break;
+        }
+        pDiagramas++;
+    }
+
+    if (!diagrama_existe)
+    {
+        strcpy((*diagrama).nombre, nombre);
+    } else
+    {
+        mensaje = "Ya existe un diagrama con este nombre.";
+        printf("%s\n", mensaje);
+        mensaje_error();
+    }
 }
 
 void agregar_autor (GtkButton* button, gpointer user_data) 
 {
+    bool autor_existe = false;
     const gchar *nombre = gtk_entry_get_text(GTK_ENTRY(autorcrear));
+    char *p = (char *) nombre;
 
+    char *pNombreAutor;
     struct Autor *pAutores = (*diagrama).autores;
     for (int i = 0; i < (*diagrama).numeroAutores; i++) {
+        pNombreAutor = (*pAutores).nombre;
+        if (comparar_palabras(p, pNombreAutor))
+        {
+            autor_existe = true;
+            break;
+        }
         pAutores++;
     }
-    strcpy((*pAutores).nombre, nombre);
+    
+    if (!autor_existe)
+    {
+        strcpy((*pAutores).nombre, nombre);
 
-    gtk_widget_queue_draw((GtkWidget *) user_data);
+        gtk_widget_queue_draw((GtkWidget *) user_data);
 
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ComboAutor), (*pAutores).nombre);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(ComboAutor), 0);
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ComboAutor), (*pAutores).nombre);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(ComboAutor), 0);
+        gtk_entry_set_text(GTK_ENTRY(autorcrear), "");
 
-    (*diagrama).numeroAutores++;
+        (*diagrama).numeroAutores++;
+    } else
+    {
+        mensaje = "El Autor ya existe.";
+        printf("%s\n", mensaje);
+        mensaje_error();
+    }
 }
 
 void agregar_caso_uso (GtkButton* button, gpointer user_data) 
 {
+    bool caso_existe = false;
     const gchar *nombre = gtk_entry_get_text(GTK_ENTRY(casousocrear));
+    char *p = (char *) nombre;
 
+    char *pNombreCaso;
     struct CasoDeUso *pCasosDeUso = (*diagrama).casosDeUso;
     for (int i = 0; i < (*diagrama).numeroCasosdeUso; i++) {
+        pNombreCaso = (*pCasosDeUso).nombre;
+        if (comparar_palabras(p, pNombreCaso))
+        {
+            caso_existe = true;
+            break;
+        }
         pCasosDeUso++;
     }
-    strcpy((*pCasosDeUso).nombre, nombre);
+    
+    if (!caso_existe)
+    {
+        strcpy((*pCasosDeUso).nombre, nombre);
 
-    gtk_widget_queue_draw((GtkWidget *) user_data);
+        gtk_widget_queue_draw((GtkWidget *) user_data);
 
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ComboCasoUso), (*pCasosDeUso).nombre);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(ComboCasoUso), 0);
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ComboCasoUso), (*pCasosDeUso).nombre);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(ComboCasoUso), 0);
+        gtk_entry_set_text(GTK_ENTRY(casousocrear), "");
 
-    (*diagrama).numeroCasosdeUso++;
+        (*diagrama).numeroCasosdeUso++;
+    } else
+    {
+        mensaje = "El Caso de Uso ya existe.";
+        printf("%s\n", mensaje);
+        mensaje_error();
+    }
 }
 
 void agregar_asociacion (GtkButton* button, gpointer user_data) 
 {
+    bool asociacion_existe = false;
     gchar *autor = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(ComboAutor));
     gchar *casoDeUso = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(ComboCasoUso));
 
+    char *pNombreAutor;
+    char *pNombreCaso;
     struct Asociacion *pAsociaciones = (*diagrama).asociaciones;
     for (int i = 0; i < (*diagrama).numeroAsociaciones; i++) {
+        pNombreAutor = ((*pAsociaciones).autor)->nombre;
+        pNombreCaso = ((*pAsociaciones).casoDeUso)->nombre;
+        if ((*pAsociaciones).activo && comparar_palabras(autor, pNombreAutor) && comparar_palabras(casoDeUso, pNombreCaso))
+        {
+            asociacion_existe = true;
+            break;
+        }
         pAsociaciones++;
     }
 
-    struct Autor *pAutores = (*diagrama).autores;
-    for (int i = 0; i < (*diagrama).numeroAutores; i++) {
-        if (comparar_palabras((*pAutores).nombre, autor))
-            break;
-        pAutores++;
+    if (!asociacion_existe)
+    {
+        struct Autor *pAutores = (*diagrama).autores;
+        for (int i = 0; i < (*diagrama).numeroAutores; i++) {
+            if (comparar_palabras((*pAutores).nombre, autor))
+                break;
+            pAutores++;
+        }
+
+        struct CasoDeUso *pCasosDeUso = (*diagrama).casosDeUso;
+        for (int i = 0; i < (*diagrama).numeroCasosdeUso; i++) {
+            if (comparar_palabras((*pCasosDeUso).nombre, casoDeUso))
+                break;
+            pCasosDeUso++;
+        }
+
+        (*pAsociaciones).autor = pAutores;
+        (*pAsociaciones).casoDeUso = pCasosDeUso;
+        (*pAsociaciones).activo = true;
+
+        gtk_widget_queue_draw((GtkWidget *) user_data);
+
+        (*diagrama).numeroAsociaciones++;
+    } else
+    {
+        mensaje = "La Relación de Asociación ya existe.";
+        printf("%s\n", mensaje);
+        mensaje_error();
     }
+}
 
-    struct CasoDeUso *pCasosDeUso = (*diagrama).casosDeUso;
-    for (int i = 0; i < (*diagrama).numeroCasosdeUso; i++) {
-        if (comparar_palabras((*pCasosDeUso).nombre, casoDeUso))
-            break;
-        pCasosDeUso++;
-    }
+void mensaje_error ()
+{   
+    GtkWidget *dialog;
 
-    (*pAsociaciones).autor = pAutores;
-    (*pAsociaciones).casoDeUso = pCasosDeUso;
-    (*pAsociaciones).activo = true;
-
-    gtk_widget_queue_draw((GtkWidget *) user_data);
-
-    (*diagrama).numeroAsociaciones++;
+    dialog = gtk_message_dialog_new (GTK_WINDOW(FrmPrincipal), 0, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, mensaje);
+    gtk_window_set_title(GTK_WINDOW(dialog), "Error");
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
 }
 
 void eliminar_asociacion (GtkButton* button, gpointer user_data) 
@@ -296,17 +421,14 @@ void eliminar_asociacion (GtkButton* button, gpointer user_data)
         pAsociaciones++;
     }
     if (!encontrado) 
-    {
-        printf("La relación de Asociación no se encontró.\n");
+    {   
+        mensaje = "La relación de Asociación no se encontró.";
+        printf("%s\n", mensaje);
+        mensaje_error();
     }
 
     gtk_widget_queue_draw((GtkWidget *) user_data);
 }
-
-int numeroDiagramas = 0;
-int *pNumeroDiagramas = &numeroDiagramas;
-struct DiagramaCasosDeUso arregloDiagramas [20];
-struct DiagramaCasosDeUso *pDiagramas = arregloDiagramas;
 
 void nuevo_diagrama (GtkButton* button, gpointer user_data) 
 {
@@ -340,6 +462,30 @@ void guardar_diagrama (GtkButton* button, gpointer user_data)
         escribir_diagrama_en_txt(diagrama);
 
     printf("Se ha guardado exitosamente.\n");
+
+    modo_editabe = true;
+
+    numeroDiagramas = 0;
+    pNumeroDiagramas = &numeroDiagramas;
+    pDiagramas = arregloDiagramas;
+    //Este método pertenece a manejo_archivos.c
+    obtener_diagramas(pDiagramas, pNumeroDiagramas);
+
+    //Con esto el usuario puede seguir editando el diagrama que ha editado
+    const gchar *nombre = gtk_entry_get_text(GTK_ENTRY(nombrecrear));
+    char *p = (char *) nombre;
+    char *pNombreDiagrama;
+
+    pDiagramas = arregloDiagramas;
+    for (int i = 0; i < numeroDiagramas; i++)
+    {   
+        pNombreDiagrama = (*pDiagramas).nombre;
+        if (comparar_palabras(p, pNombreDiagrama))
+            break;
+        pDiagramas++;
+    }
+
+    diagrama = pDiagramas;
 }
 
 void seleccionar_diagrama (GtkButton* button, gpointer user_data)
